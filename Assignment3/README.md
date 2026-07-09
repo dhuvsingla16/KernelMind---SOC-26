@@ -1,6 +1,6 @@
 # KernelMind: The Hybrid Meta-Scheduler
 
-**Language:** C++  
+**Language:** C++
 
 > **SoC '26 Assignment 3 – Reinforcement Learning Based CPU Scheduler**
 
@@ -93,17 +93,22 @@ Reward engineering proved to be the most important aspect of the project.
 
 A simple linear waiting-time penalty causes the RL agent to imitate **Shortest Job First (SJF)**, because mathematically it is often cheaper to indefinitely starve one long process than to increase the waiting time of many small ones.
 
-To overcome this, KernelMind introduces a **non-linear starvation penalty** inspired by the concept of **Aging** used in operating systems.
+To overcome this, KernelMind introduces a reward formulation that simultaneously minimizes the **average waiting time** while aggressively penalizing **extreme starvation**.
 
-Instead of penalizing waiting time linearly, the reward function penalizes:
+Instead of using a purely linear objective, the reward at each scheduling decision is computed as:
 
-```text
-(Maximum Waiting Time)²
+```math
+R_t = -\left(\alpha\frac{\sum_{i=1}^{|Q|}W_i}{|Q|} + \beta\max_{i\in Q}(W_i)^2\right)
 ```
 
-As a process waits longer, its penalty grows quadratically.
+Where:
 
-This forces the RL agent to eventually prioritize starving processes, preventing pathological behavior while still preserving the efficiency benefits of SJF.
+- \(Q\) is the current ready queue.
+- \(W_i\) is the waiting time of process \(i\).
+- \(\alpha\) controls the penalty on the **average waiting time**, encouraging high throughput.
+- \(\beta\) controls the **quadratic starvation penalty**, ensuring that excessively delayed processes rapidly become expensive.
+
+The quadratic term grows much faster than the average waiting-time penalty, forcing the agent to eventually prioritize starving processes while still maintaining the efficiency benefits of SJF.
 
 ---
 
@@ -117,6 +122,45 @@ The trained Meta-Agent was benchmarked against traditional scheduling algorithms
 | Round Robin | 275.35 | 518.41 | 0.72 |
 | Shortest Job First | **136.53** | 334.41 | 0.42 |
 | **KernelMind (RL Meta-Agent)** | **≈155.00** | **≈210.00** | **0.81** |
+
+### Training Convergence
+
+During training, the moving average waiting time steadily decreased, indicating that the agent successfully learned an increasingly effective scheduling policy.
+
+```text
+
+Episode 0      | Moving Avg Wait: 156.04
+Episode 5000   | Moving Avg Wait: 14.1121
+Episode 10000  | Moving Avg Wait: 5.63636
+Episode 15000  | Moving Avg Wait: 4.71722
+Episode 20000  | Moving Avg Wait: 4.41922
+Episode 25000  | Moving Avg Wait: 4.2416
+
+
+```
+
+The sharp reduction in moving average waiting time demonstrates stable convergence of the Q-Learning agent. Most of the improvement occurs during the early stages of training, after which the policy gradually refines itself and approaches a stable optimum.
+
+### Learned Q-Table
+
+After **30,000 training episodes**, the learned action-value table is:
+
+```text
+--- FINAL Q-TABLE ---
+
+State    FCFS(0)        RR(1)          SJF(2)
+0        -24311.06      -17113.06      -27155.95
+1        -15776.89      -45650.26      -43321.01
+2        -13163.27      -12562.47      -13167.74
+3        -32283.35      -17834.13      -25618.64
+4        -62728.41      -63954.57      -17566.68
+5        -4.13          -11695.12      -1763.03
+6        -32021.44      -17903.91      -27675.74
+7        -61033.86      -38023.96      -18626.86
+8        -116896.04     -121193.06     -96729.12
+```
+
+Since the reward is defined as a **negative scheduling cost**, **larger (less negative)** Q-values correspond to better long-term scheduling decisions. The learned values reveal that the agent develops clear preferences for different scheduling algorithms depending on the current workload and starvation conditions, rather than relying on a single heuristic throughout execution.
 
 ### Key Observations
 
@@ -179,14 +223,14 @@ python plot.py
 
 # Features
 
--  Event-driven CPU scheduling simulator
--  Reinforcement Learning based meta-scheduler
--  Tabular Q-Learning implementation
--  Dynamic switching between FCFS, RR and SJF
--  Realistic stochastic workload generation
--  Non-linear reward shaping to eliminate starvation
--  Emergent Multi-Level Feedback Queue (MLFQ)-like behavior
--  Trains over **30,000+ episodes** in just a few seconds
+- Event-driven CPU scheduling simulator
+- Reinforcement Learning based meta-scheduler
+- Tabular Q-Learning implementation
+- Dynamic switching between FCFS, RR and SJF
+- Realistic stochastic workload generation
+- Non-linear reward shaping to eliminate starvation
+- Emergent Multi-Level Feedback Queue (MLFQ)-like behavior
+- Trains over **30,000+ episodes** in just a few seconds
 
 ---
 
