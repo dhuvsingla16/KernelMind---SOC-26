@@ -87,6 +87,82 @@ This compact representation keeps the Q-table extremely small while still preser
 
 ---
 
+## 4. Action Space
+
+Instead of scheduling individual processes directly, the reinforcement learning agent operates as a **meta-scheduler**. At every scheduling event, it chooses one of three classical CPU scheduling algorithms as its action.
+
+When a CPU is bombarded with tasks—some tiny (such as I/O-bound jobs) and some massive (such as compiling large programs)—the operating system must decide which process should execute next.
+
+The action space therefore consists of:
+
+### FCFS (First-Come, First-Served)
+
+Processes execute strictly in the order they arrive.
+
+- Extremely simple and predictable.
+- Suffers from the **Convoy Effect**, where one long-running process blocks the CPU while numerous short jobs accumulate behind it.
+- Provides fairness in arrival order but often results in poor overall responsiveness.
+
+### Shortest Job First (SJF)
+
+Always executes the process with the smallest CPU burst first.
+
+- Minimizes average waiting time.
+- Maximizes overall system throughput.
+- Can cause **starvation**, since long-running processes may continually be postponed as shorter jobs arrive.
+
+### Round Robin (RR)
+
+Each process receives a fixed **time quantum** before being preempted.
+
+- Prevents starvation by ensuring every process periodically receives CPU time.
+- Improves fairness among processes.
+- Frequent context switching introduces overhead because the processor must repeatedly save and restore registers, reducing overall throughput.
+
+Rather than hardcoding which scheduler should be used, the RL agent learns **when each scheduling policy is most beneficial** based on the current system state.
+
+---
+
+## 5. Learning Algorithm
+
+KernelMind uses **Tabular Q-Learning**, where the agent gradually estimates the long-term value of selecting each scheduling policy in every state.
+
+### Bellman Equation (Temporal Difference Learning)
+
+After every scheduling decision, the agent observes the immediate reward and updates its Q-table using the **Temporal Difference (TD) Error**.
+
+The update rule is
+
+```math
+Q(s,a)\leftarrow Q(s,a)+\alpha\left[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\right]
+```
+
+where
+
+- \(r\) is the immediate reward,
+- \(\gamma\) is the discount factor,
+- \(\alpha\) is the learning rate,
+- and
+
+```math
+\delta = r+\gamma\max_{a'}Q(s',a')-Q(s,a)
+```
+
+is the **Temporal Difference (TD) Error**.
+
+The TD error measures how surprising the observed outcome is compared to the agent's previous expectation. Positive TD errors strengthen an action, while negative errors reduce its estimated value.
+
+### Epsilon-Greedy Exploration
+
+During training, KernelMind follows an **ε-decay exploration strategy**.
+
+- Initially, ε is high, encouraging the agent to explore different scheduling policies through random actions.
+- As training progresses, ε gradually decays toward **0.0**, causing the agent to rely increasingly on its learned Q-values.
+- By the end of **30,000 training episodes**, exploration has effectively ceased, and the agent consistently exploits the scheduling policy that maximizes its expected long-term reward.
+
+This balance between exploration and exploitation allows the agent to discover an adaptive scheduling strategy rather than converging prematurely to a suboptimal heuristic.
+
+---
 ## 4. Reward Shaping
 
 Reward engineering proved to be the most important aspect of the project.
