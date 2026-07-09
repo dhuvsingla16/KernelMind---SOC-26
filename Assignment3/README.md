@@ -1,7 +1,6 @@
 # KernelMind: The Hybrid Meta-Scheduler
 
 **Language:** C++  
-**License:** MIT
 
 > **SoC '26 Assignment 3 – Reinforcement Learning Based CPU Scheduler**
 
