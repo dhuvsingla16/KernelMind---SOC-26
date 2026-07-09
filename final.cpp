@@ -363,7 +363,7 @@ public:
     int choose_action(int state, bool training = true) {
         if (!training || float_dist(rng) > epsilon) {
             int best_action = 0;
-            double max_q = q_table[state]; 
+            double max_q = q_table[state][0]; 
             
             for (int a = 1; a < num_actions; ++a) {
                 if (q_table[state][a] > max_q) {
@@ -377,7 +377,7 @@ public:
     }
 
     void learn(int state, int action, double reward, int next_state) {
-        double max_next_q = q_table[next_state]; 
+        double max_next_q = q_table[next_state][0]; 
         for (int a = 1; a < num_actions; ++a) {
             if (q_table[next_state][a] > max_next_q) {
                 max_next_q = q_table[next_state][a];
