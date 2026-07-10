@@ -33,7 +33,6 @@ To enable this transition, the entire system was redesigned:
 - [Training Pipeline](#training-pipeline)
 - [Design Questions](#design-question-answers)
 - [Experimental Results](#final-evaluation--results)
-- [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Running the Project](#running-the-project)
 
@@ -255,9 +254,9 @@ Double DQN significantly reduces the overestimation bias commonly observed in cl
 
 The network outputs
 
-\[
-Q(S,a)
-\]
+\
+$Q(S,a)\$
+
 
 for every valid process.
 
@@ -269,9 +268,7 @@ higher Q-values correspond to
 
 The scheduler therefore selects
 
-\[
-\arg\max_a Q(S,a)
-\]
+\$\arg\max_a Q(S,a)\$
 
 at inference time.
 
@@ -313,9 +310,9 @@ so the learned policy is executed deterministically.
 
 Every interaction is stored as
 
-\[
-(S_t,A_t,R_{t+1},S_{t+1})
-\]
+\
+$(S_t,A_t,R_{t+1},S_{t+1})$
+
 
 inside a replay memory.
 
@@ -333,8 +330,7 @@ which breaks temporal correlation and stabilizes learning.
 
 The Double DQN target is computed as
 
-\[
-Y_t =
+\$Y_t =
 R_{t+1}
 +
 \gamma
@@ -343,8 +339,7 @@ Q_{target}
 S_{t+1},
 \arg\max_a
 Q_{policy}(S_{t+1},a)
-\right)
-\]
+\right)\$
 
 Using separate policy and target networks prevents unstable bootstrap updates.
 
@@ -679,4 +674,4 @@ The script will automatically
 - Huber Loss
 - CPU Scheduling
 - Operating Systems
-```
+
