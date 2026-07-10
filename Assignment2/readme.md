@@ -379,21 +379,35 @@ This demonstrates the learned landing behavior in real time.
 
 # Results
 
-Training produces two primary performance plots.
+After training the Tabular Q-Learning agent for **15,000 episodes**, the learned policy demonstrates a significant improvement in both cumulative reward and landing success despite operating in a stochastic environment with changing wind conditions.
 
-## Learning Curve
+## Training Performance
 
-The moving average reward steadily improves over training, indicating that the agent progressively learns better landing strategies while reducing unnecessary penalties.
+<p align="center">
+  <img src="learning_curve.png" alt="Training Results" width="900"/>
+</p>
+
+The figure above illustrates two important learning metrics:
+
+### Learning Curve (Moving Average Reward)
+
+- The moving average reward steadily improves throughout training.
+- Initially, the agent experiences highly negative rewards due to crashes, inefficient fuel usage, and random exploration.
+- As training progresses, the Q-table converges toward better state-action values, allowing the probe to execute safer and more efficient descents.
+- Minor fluctuations remain because of the stochastic wind model and continued ε-greedy exploration.
 
 ---
 
-## Landing Success Rate
+### Landing Success Rate
 
-The landing success percentage increases significantly during training, demonstrating successful policy learning despite stochastic atmospheric disturbances.
-
-Because wind transitions are probabilistic, small oscillations remain even after convergence.
+- The landing success percentage increases consistently over training.
+- Initially, almost every episode results in failure.
+- As the agent explores and updates its Q-values using the Bellman equation, successful soft landings become increasingly frequent.
+- Small oscillations are expected due to probabilistic atmospheric disturbances and continued exploration during training.
 
 ---
+
+Overall, the plots demonstrate that the learned policy successfully adapts to Adrian's uncertain environment and converges toward a stable landing strategy capable of safely completing the mission.
 
 # Design Decisions
 
@@ -440,21 +454,6 @@ Euler Integration is computationally simple while accurately approximating probe
 - ε-Greedy Policy
 - Stochastic Environment Modeling
 - Reinforcement Learning Evaluation
-
----
-
-# Future Improvements
-
-Possible extensions include
-
-- Multi-level thrust control
-- Deep Q-Networks (DQN)
-- Continuous state approximation
-- Continuous action spaces
-- Adaptive reward shaping
-- More realistic atmospheric physics
-- Variable fuel constraints
-- Sensor noise modeling
 
 ---
 
