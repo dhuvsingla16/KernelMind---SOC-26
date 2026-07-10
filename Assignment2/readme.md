@@ -423,20 +423,7 @@ Using a transition matrix preserves temporal correlations between consecutive wi
 
 ## Why Euler Integration?
 
-Euler Integration is computationally simple while accurately approximating probe motion for sufficiently small timesteps.
-
----
-
-# Repository Structure
-
-```
-Assignment-2/
-│
-├── adrian_descent.ipynb
-├── README.md
-├── report.md
-└── learning_curve.png
-```
+Euler Integration is computationally simple while accurately approximating probe motion for sufficiently small timesteps. 
 
 ---
 
