@@ -384,7 +384,7 @@ After training the Tabular Q-Learning agent for **15,000 episodes**, the learned
 ## Training Performance
 
 <p align="center">
-  <img src="learning_curve.png" alt="Training Results" width="900"/>
+  <img src="image.png" alt="Training Results" width="900"/>
 </p>
 
 The figure above illustrates two important learning metrics:
