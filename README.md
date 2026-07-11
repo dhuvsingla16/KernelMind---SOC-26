@@ -1,6 +1,6 @@
 # KernelMind — Reinforcement Learning for Operating System Design
 
-> **Summer of Code (SoC) 2026**  
+> **Seasons of Code (SoC) 2026**  
 > Department of Electrical Engineering  
 > Indian Institute of Technology Bombay
 
@@ -18,7 +18,7 @@ Indian Institute of Technology Bombay
 
 # About the Project
 
-KernelMind is my **Summer of Code (SoC) 2026** project exploring how **Reinforcement Learning (RL)** can be used to design intelligent Operating System components.
+KernelMind is my **Seasons of Code (SoC) 2026** project exploring how **Reinforcement Learning (RL)** can be used to design intelligent Operating System components.
 
 Modern operating systems traditionally rely on carefully engineered scheduling heuristics and handcrafted policies to manage CPU resources. While these algorithms perform well under many workloads, they are static by design and cannot adapt intelligently to changing execution patterns.
 
@@ -264,7 +264,7 @@ Future directions include
 
 # Acknowledgements
 
-This repository is part of the **Summer of Code (SoC) 2026**.
+This repository is part of the **Seasons of Code (SoC) 2026**.
 
 The assignments progressively introduce Reinforcement Learning through carefully designed practical systems that bridge classical RL concepts with Operating System kernel design, ultimately demonstrating how intelligent scheduling policies can be learned rather than manually engineered.
 
